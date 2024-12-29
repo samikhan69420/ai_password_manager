@@ -63,14 +63,14 @@ class _SetProfilePageState extends State<SetProfilePage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              placeholder: "First Name",
+                              placeholder: Text("First Name"),
                               controller: firstNameController,
                             ),
                           ),
                           const Gap(10),
                           Expanded(
                             child: TextField(
-                              placeholder: "Last Name",
+                              placeholder: Text("Last Name"),
                               controller: lastNameController,
                             ),
                           ),
@@ -92,7 +92,7 @@ class _SetProfilePageState extends State<SetProfilePage> {
                     ),
                     const Gap(10),
                     TextArea(
-                      placeholder: "A little bit about yourself",
+                      placeholder: Text("A little bit about yourself"),
                       expandableHeight: true,
                       controller: descController,
                       initialHeight: 100,

@@ -34,8 +34,7 @@ class CreditCard extends StatelessWidget {
                   border: border,
                   padding: border ? null : const EdgeInsets.all(0),
                   controller: cardNumberController,
-                  placeholder: "Card Number",
-                  maxLength: 16,
+                  placeholder: Text("Card Number"),
                   inputFormatters: [CreditCardNumberInputFormatter()],
                 ),
                 const Gap(10),
@@ -47,7 +46,7 @@ class CreditCard extends StatelessWidget {
                         border: border,
                         padding: border ? null : const EdgeInsets.all(0),
                         controller: monthController,
-                        placeholder: "MM/YY",
+                        placeholder: Text("MM/YY"),
                         inputFormatters: [
                           CreditCardExpirationDateFormatter(),
                         ],
@@ -60,7 +59,7 @@ class CreditCard extends StatelessWidget {
                         border: border,
                         padding: border ? null : const EdgeInsets.all(0),
                         controller: cvcController,
-                        placeholder: "CVC",
+                        placeholder: Text("CVC"),
                         inputFormatters: [
                           CreditCardCvcInputFormatter(),
                         ],

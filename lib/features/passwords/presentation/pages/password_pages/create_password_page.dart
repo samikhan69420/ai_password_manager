@@ -145,7 +145,7 @@ class _CreatePasswordPageState extends State<CreatePasswordPage> {
                               border: false,
                               controller: titleController,
                               initialValue: "My Cool Password",
-                              placeholder: "Password Title",
+                              placeholder: Text("Password Title"),
                               maxLength: 26,
                               style: theme.typography.h4,
                             ),

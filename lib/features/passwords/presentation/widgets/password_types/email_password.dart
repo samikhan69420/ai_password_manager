@@ -55,7 +55,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                   padding: widget.border ? null : const EdgeInsets.all(0),
                   controller: widget.emailController,
                   useNativeContextMenu: true,
-                  placeholder: 'Email / Username',
+                  placeholder: Text('Email / Username'),
                 ),
                 const Gap(10),
                 TextField(
@@ -63,7 +63,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                   padding: widget.border ? null : const EdgeInsets.all(0),
                   controller: widget.passwordController,
                   useNativeContextMenu: true,
-                  placeholder: 'Password',
+                  placeholder: Text('Password'),
                   obscureText: widget.border ? false : !visible,
                   trailing: widget.border
                       ? IconButton(

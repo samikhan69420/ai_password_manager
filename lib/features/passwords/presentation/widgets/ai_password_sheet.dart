@@ -138,7 +138,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextArea(
-              placeholder: "Additional parameters...",
+              placeholder: Text("Additional parameters..."),
               border: true,
               expandableHeight: true,
               controller: widget.additionalParameters,
@@ -149,7 +149,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Card(
-              borderRadius: 20,
+              borderRadius: BorderRadius.circular(20),
               child: Column(
                 children: [
                   const Row(
