@@ -61,7 +61,13 @@ class _CreatePasswordPageState extends State<CreatePasswordPage> {
       child: Scaffold(
         floatingHeader: false,
         headers: [
-          const AppBar(
+          AppBar(
+            leading: [
+              IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(RadixIcons.arrowLeft),
+                  variance: ButtonVariance.ghost)
+            ],
             title: Text("Create Password"),
           ),
           Padding(
