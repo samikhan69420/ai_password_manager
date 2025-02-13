@@ -17,18 +17,26 @@
 </p>
 
 ## About
-Passman is a password manager that integrates AI with managing and creating passwords, it not only creates specific easy to remember passwords, but it also can keep track of all your passwords so you won't have to remember them all!
+Passman is a password manager that integrates AI with managing and creating passwords, it not only creates specific easy to remember passwords, but it also can keep track of all your passwords so you will not have to remember them all!
 
 ## Developing
-This app uses Clean Architecture to make the code production ready and make adding new features easier. This app also uses Bloc's subset "Cubit" for state management to connect the UI to the backend.
+This app uses:
+ - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - for code maintainability.
+ - [Shared Preferences](https://pub.dev/packages/shared_preferences) - for storing the passwords.
+ - [Cubit](https://pub.dev/packages/flutter_bloc) - for state management.
+ - [GetIt](https://pub.dev/packages/get_it) - for dependency injection.
+ - [Http](https://pub.dev/packages/http) - for communicating with the API.
+ - [Groq](https://groq.com/) - for accessing the AI models.
 
 ## Download
 Download Passman for android from the github releases.
 
 ## Preview
 
-<img width="240" alt="Screenshot 2024-11-07 at 10 52 43 PM" src="https://github.com/user-attachments/assets/6cb102ac-d6e1-4294-bcd1-296f9807162e">
+<html>
+  <img width="240" alt="Screenshot 2024-11-07 at 10 52 43 PM" src="https://github.com/user-attachments/assets/6cb102ac-d6e1-4294-bcd1-296f9807162e">
 <img width="240" alt="Screenshot 2024-11-07 at 11 00 25 PM" src="https://github.com/user-attachments/assets/9d23b5dd-2832-467f-852f-2bb820c87e4c">
 <br/>
-<img width="240" alt="Screenshot 2024-11-07 at 11 00 25 PM" src="https://github.com/user-attachments/assets/cdcf2f2c-a7e1-4cc0-a5ae-32575bca029d">
-<img width="240" alt="Screenshot 2024-11-07 at 11 00 25 PM" src="https://github.com/user-attachments/assets/2e542c16-aa01-4e8b-89d5-486f7029f52e">
+<img width="190" alt="Screenshot 2024-11-07 at 11 00 25 PM" style = "box-shadow: 0px 5px 30px -5px rgba(0,0,0,0.9); margin: 35px" src="https://github.com/user-attachments/assets/cdcf2f2c-a7e1-4cc0-a5ae-32575bca029d">
+<img width="190" alt="Screenshot 2024-11-07 at 11 00 25 PM" src="https://github.com/user-attachments/assets/2e542c16-aa01-4e8b-89d5-486f7029f52e">
+</html>
