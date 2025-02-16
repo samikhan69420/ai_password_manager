@@ -25,7 +25,7 @@ Passman is a password manager that integrates AI with managing and creating pass
 This app uses:
 
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - for code maintainability.
-- [Shared Preferences](https://pub.dev/packages/shared_preferences) - for storing the passwords.
+- [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) - for storing the passwords.
 - [Cubit](https://pub.dev/packages/flutter_bloc) - for state management.
 - [GetIt](https://pub.dev/packages/get_it) - for dependency injection.
 - [Http](https://pub.dev/packages/http) - for communicating with the API.
