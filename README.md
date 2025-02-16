@@ -10,7 +10,7 @@
     ·
     <a href="#developing">Developing</a>
     ·
-    <a href="#preview">Download</a>
+    <a href="https://github.com/samikhan69420/passman/releases/download/v1.0/Passman-v1.0.apk">Download</a>
     ·
     <a href="#preview">Preview</a>
   </p>
@@ -30,10 +30,6 @@ This app uses:
 - [GetIt](https://pub.dev/packages/get_it) - for dependency injection.
 - [Http](https://pub.dev/packages/http) - for communicating with the API.
 - [Groq](https://groq.com/) - for accessing the AI models.
-
-## Download
-
-Download Passman for android from the github releases.
 
 ## Preview
 
