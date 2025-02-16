@@ -39,7 +39,7 @@ Future<void> passwordInjectionContainer() async {
   // Repositories
 
   sl.registerLazySingleton<RemoteDataSource>(
-    () => RemoteDataSourceImpl(sharedPreferences: sl.call()),
+    () => RemoteDataSourceImpl(storage: sl.call()),
   );
   sl.registerLazySingleton<PasswordRepository>(
     () => PasswordRepositoryImpl(remoteDataSource: sl.call()),

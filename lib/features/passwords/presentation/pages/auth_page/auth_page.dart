@@ -4,7 +4,13 @@ import 'package:password_manager/main_injection_container.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+  final VoidCallback? onAuthCompleted;
+  final Function(bool isShown)? onAuthChanged;
+  const AuthPage({
+    super.key,
+    this.onAuthCompleted,
+    this.onAuthChanged,
+  });
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -15,6 +21,7 @@ class _AuthPageState extends State<AuthPage> {
   bool authSuccess = false;
 
   Future<bool> didAuthenticate() async {
+    widget.onAuthChanged?.call(true);
     return await auth.authenticate(localizedReason: ' ');
   }
 
@@ -23,7 +30,8 @@ class _AuthPageState extends State<AuthPage> {
     super.initState();
     didAuthenticate().then(
       (authenticated) {
-        if (authenticated) {
+        if (authenticated && mounted) {
+          widget.onAuthChanged?.call(false);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -31,9 +39,6 @@ class _AuthPageState extends State<AuthPage> {
             ),
             (route) => false,
           );
-          setState(() {
-            authSuccess = true;
-          });
         }
       },
     );
@@ -63,7 +68,8 @@ class _AuthPageState extends State<AuthPage> {
             onPressed: () {
               didAuthenticate().then(
                 (authenticated) {
-                  if (authenticated) {
+                  if (authenticated && mounted) {
+                    (widget.onAuthCompleted ?? () {})();
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

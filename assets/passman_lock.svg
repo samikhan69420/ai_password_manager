@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48.5px" height="51.5px" viewBox="0 0 48.5 51.5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>passman_lock</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-29.5, -20.5)">
+            <g id="passman_lock" transform="translate(31, 21)">
+                <g id="Lock-Hook" transform="translate(14, 0)" stroke="#FFFFFF" stroke-width="3">
+                    <path d="M7.5,1 L12.5,1 C16.6421356,1 20,4.35786438 20,8.5 L20,21 L20,21 L0,21 L0,8.5 C-5.07265313e-16,4.35786438 3.35786438,1 7.5,1 Z" id="Rectangle"></path>
+                </g>
+                <g id="Lock-Body" transform="translate(0, 17)">
+                    <rect id="Rectangle-Copy-2" fill="#FFFFFF" x="3" y="3" width="44" height="31" rx="8"></rect>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="3" fill="#000000" x="0" y="0" width="44" height="31" rx="8"></rect>
+                </g>
+                <g id="Passman" transform="translate(16, 23)" fill="#FFFFFF" fill-rule="nonzero">
+                    <path d="M7.5527864,6.5777088 L11.3167184,14.1055728 C11.8106969,15.0935298 11.4102482,16.2948759 10.4222912,16.7888544 C10.1445803,16.9277098 9.8383542,17 9.527864,17 L2,17 C0.8954305,17 0,16.1045695 0,15 C0,14.6895098 0.0722902,14.3832837 0.2111456,14.1055728 L3.9750776,6.5777088 C4.4690561,5.5897518 5.6704022,5.1893031 6.6583592,5.6832816 C7.045414,5.876809 7.359259,6.190654 7.5527864,6.5777088 Z" id="Triangle"></path>
+                    <circle id="Oval" cx="5.763932" cy="4" r="4"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

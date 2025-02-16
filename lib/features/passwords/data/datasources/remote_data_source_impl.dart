@@ -1,32 +1,46 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:password_manager/features/passwords/data/datasources/remote_data_source.dart';
 import 'package:password_manager/features/passwords/domain/entities/password_entity.dart';
 import 'package:random_string_generator/random_string_generator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  final SharedPreferences sharedPreferences;
+  final FlutterSecureStorage storage;
 
   final StreamController<List<PasswordEntity>> streamController =
       StreamController<List<PasswordEntity>>.broadcast();
 
-  RemoteDataSourceImpl({required this.sharedPreferences});
+  RemoteDataSourceImpl({required this.storage});
 
   final RandomStringGenerator generator =
       RandomStringGenerator(fixedLength: 12);
 
-  void updatePasswordStream() {
-    List<String> passList = sharedPreferences.getStringList('passList') ?? [];
-
-    List<PasswordEntity> passwordEntityList = passList
+  List<PasswordEntity> jsonToEntity(List<String> jsonList) {
+    return jsonList
         .map(
           (e) => PasswordEntity.fromJson(e),
         )
         .toList();
+  }
 
-    streamController.add(passwordEntityList);
+  List<String> entityToJson(List<PasswordEntity> jsonList) {
+    return jsonList
+        .map(
+          (e) => e.toJson(),
+        )
+        .toList();
+  }
+
+  Future<void> updatePasswordStream() async {
+    String? jsonString = await storage.read(key: 'passList');
+
+    List<String> jsonPassList =
+        jsonString != null ? jsonDecode(jsonString).cast<String>() : [];
+
+    List<PasswordEntity> passList = jsonToEntity(jsonPassList);
+    streamController.add(passList);
   }
 
   @override
@@ -47,22 +61,29 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       creditCardInfo: uiPasswordEntity.creditCardInfo,
       otherFields: uiPasswordEntity.otherFields,
     );
-    final List<String> passList =
-        sharedPreferences.getStringList('passList') ?? [];
 
-    passList.add(passwordEntity.toJson());
+    String? jsonString = await storage.read(key: 'passList');
 
-    sharedPreferences.setStringList('passList', passList);
+    List<String> jsonPassList =
+        jsonString != null ? jsonDecode(jsonString).cast<String>() : [];
+
+    final List<PasswordEntity> passList = jsonToEntity(jsonPassList);
+    passList.add(passwordEntity);
+
+    storage.write(key: 'passList', value: jsonEncode(entityToJson(passList)));
     updatePasswordStream();
   }
 
   @override
-  void deletePassword(String id) {
-    final List<String> passList =
-        sharedPreferences.getStringList('passList') ?? [];
-    passList.removeWhere(
-        (element) => jsonDecode(element)['passwordIdentifier'] == id);
-    sharedPreferences.setStringList('passList', passList);
+  Future<void> deletePassword(String id) async {
+    final String? jsonString = await storage.read(key: 'passList');
+    List<String> jsonPassList =
+        jsonString != null ? jsonDecode(jsonString).cast<String>() : [];
+
+    final List<PasswordEntity> passList = jsonToEntity(jsonPassList);
+
+    passList.removeWhere((e) => e.passwordIdentifier == id);
+    storage.write(key: "passList", value: jsonEncode(entityToJson(passList)));
     updatePasswordStream();
   }
 

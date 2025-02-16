@@ -2,7 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/features/ai/domain/entities/user_entity.dart';
 import 'package:password_manager/features/ai/presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'package:password_manager/features/app/const/classes_functions/toast.dart';
+import 'package:password_manager/features/premium/data/datasources/premium_remote_data_source.dart';
+import 'package:password_manager/features/premium/data/datasources/premium_remote_data_source_impl.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:password_manager/main_injection_container.dart' as di;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,6 +20,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController descController = TextEditingController();
 
   String? dateOfBirth;
+  final PremiumRemoteDataSource premiumRemoteDataSource =
+      PremiumRemoteDataSourceImpl(sharedPreferences: di.sl());
 
   @override
   void initState() {

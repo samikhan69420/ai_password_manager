@@ -43,7 +43,6 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       'POST',
       Uri.parse('https://api.groq.com/openai/v1/chat/completions'),
     );
-    print(prompt);
     request.body = jsonEncode({
       "messages": [
         {

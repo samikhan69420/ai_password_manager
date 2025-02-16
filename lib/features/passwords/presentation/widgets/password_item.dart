@@ -18,7 +18,7 @@ class PasswordItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Basic(
         title: Text(passwordEntity.username!),

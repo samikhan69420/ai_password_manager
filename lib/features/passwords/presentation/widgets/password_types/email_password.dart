@@ -1,17 +1,15 @@
 // ignore_for_file: implementation_imports, unused_import
 import 'dart:ui';
-
-import 'package:fluid_dialog/fluid_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/features/ai/domain/entities/user_entity.dart';
 import 'package:password_manager/features/ai/presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'package:password_manager/features/ai/presentation/pages/profile_page/profile_page.dart';
 import 'package:password_manager/features/passwords/presentation/widgets/ai_password_sheet.dart';
+import 'package:password_manager/features/premium/presentation/cubit/premium_cubit_cubit.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class EmailPassword extends StatefulWidget {
   final bool border;
-
   final TextStyle? textStyle;
 
   final TextEditingController emailController;
@@ -69,6 +67,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                       ? IconButton(
                           icon: const Icon(BootstrapIcons.stars),
                           alignment: Alignment.center,
+                          size: ButtonSize.small,
                           variance: ButtonVariance.ghost,
                           onPressed: () {
                             openDrawer(

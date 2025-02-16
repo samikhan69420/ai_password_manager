@@ -1,7 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/features/app/const/pages/set_profile_page.dart';
 import 'package:password_manager/features/app/const/widgets/expanded_page_view.dart';
 import 'package:password_manager/features/app/const/widgets/onboarding_item.dart';
 import 'package:password_manager/features/passwords/presentation/pages/password_pages/passwords_page.dart';
+import 'package:password_manager/features/premium/presentation/cubit/premium_cubit_cubit.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:password_manager/main_injection_container.dart' as di;
@@ -92,6 +94,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
               width: double.infinity,
               child: Button.primary(
                 onPressed: () {
+                  BlocProvider.of<PremiumCubit>(context)
+                      .addCreditsUsecase
+                      .call(10);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const SetProfilePage(),

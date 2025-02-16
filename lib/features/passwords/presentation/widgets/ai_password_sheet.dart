@@ -1,7 +1,12 @@
+import 'dart:ui';
+
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/features/ai/domain/entities/user_entity.dart';
 import 'package:password_manager/features/ai/presentation/cubit/ai_cubit/ai_cubit.dart';
 import 'package:password_manager/features/app/const/classes_functions/toast.dart';
+import 'package:password_manager/features/premium/presentation/cubit/premium_cubit_cubit.dart';
+import 'package:password_manager/features/premium/presentation/widgets/insufficient_credits.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class AiPasswordSheet extends StatefulWidget {
@@ -18,6 +23,12 @@ class AiPasswordSheet extends StatefulWidget {
 }
 
 class _AiPasswordSheetState extends State<AiPasswordSheet> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<PremiumCubit>(context).getCredits();
+  }
+
   TextEditingController lengthController = TextEditingController();
   TextEditingController additionalParameters = TextEditingController();
 
@@ -29,41 +40,82 @@ class _AiPasswordSheetState extends State<AiPasswordSheet> {
           showToastification(state.errorMsg ?? "Unexpected Error oaccured");
         }
         if (state is AiLoaded) {
-          showDialog(
+          showGeneralDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: Basic(
-                leading: const Icon(BootstrapIcons.stars).iconLarge(),
-                title: const Text("Password").h4(),
-              ),
-              content: CodeSnippet(
-                code: state.response,
-                mode: 'shell',
-              ),
-              actions: [
-                Button.outline(
-                  child: const Text("Retry"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    BlocProvider.of<AiCubit>(context).getAiPassword('''
-                        First Name: ${widget.userEntity.firstName},
-                        Last Name: ${widget.userEntity.lastName},
-                        Date Of Birth: ${widget.userEntity.dateOfBirth},
-                        Brief Description: ${widget.userEntity.description},
-                        Memorability to Secureness scale: 5,
-                        Additional Parameters for password provided by user (IGNORE IF EMPTY): ${additionalParameters.text}
-                        Password Length: ${lengthController.text}
-                      ''');
-                  },
+            pageBuilder: (context, animation, secondaryAnimation) => Stack(
+              alignment: Alignment.center,
+              children: [
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: SizedBox.expand(),
                 ),
-                Button.primary(
-                  child: const Text("Use"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    closeDrawer(context);
-                    widget.passwordController.value =
-                        TextEditingValue(text: state.response.trim());
-                  },
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: AlertDialog(
+                    title: Basic(
+                      leading: const Icon(BootstrapIcons.stars).iconLarge(),
+                      title: const Text("Password").h4(),
+                    ),
+                    content: CodeSnippet(
+                      code: state.response,
+                      mode: 'shell',
+                    ),
+                    actions: [
+                      BlocBuilder<PremiumCubit, PremiumCubitState>(
+                        builder: (context, state) {
+                          if (state is PremiumCubitLoaded) {
+                            double credits =
+                                BlocProvider.of<PremiumCubit>(context)
+                                    .getCreditsCount();
+                            return OutlineButton(
+                              child: const Text("Retry"),
+                              onPressed: () {
+                                context.read<PremiumCubit>().getCredits();
+                                if (credits <= 0) {
+                                  Navigator.pop(context);
+                                  showCreditsDialog(context);
+                                } else {
+                                  Navigator.pop(context);
+                                  BlocProvider.of<PremiumCubit>(context)
+                                      .removeCredits(5, context);
+                                  BlocProvider.of<AiCubit>(context)
+                                      .getAiPassword('''
+                                              First Name: ${widget.userEntity.firstName},
+                                              Last Name: ${widget.userEntity.lastName},
+                                              Date Of Birth: ${widget.userEntity.dateOfBirth},
+                                              Brief Description: ${widget.userEntity.description},
+                                              Memorability to Secureness scale: 5,
+                                              Additional Parameters for password provided by user (IGNORE IF EMPTY): ${additionalParameters.text}
+                                              Password Length: ${lengthController.text}
+                                            ''');
+                                }
+                              },
+                            );
+                          } else {
+                            return Button.outline(
+                                child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                      Button.primary(
+                        child: const Text("Use"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          closeDrawer(context);
+                          widget.passwordController.value =
+                              TextEditingValue(text: state.response.trim());
+                        },
+                      ),
+                    ],
+                  )
+                      .animate()
+                      .moveY(curve: Curves.easeOutCirc)
+                      .scale(
+                          curve: Curves.easeOutCirc,
+                          duration: 700.ms,
+                          begin: Offset(0.9, 0.9))
+                      .fadeIn()
+                      .blur(begin: Offset(5, 5), end: Offset.zero),
                 ),
               ],
             ),
@@ -189,18 +241,36 @@ class _BodyWidgetState extends State<BodyWidget> {
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: PrimaryButton(
-                child: const Text("Done"),
-                onPressed: () {
-                  BlocProvider.of<AiCubit>(context).getAiPassword('''
-                        First Name: ${widget.userEntity.firstName},
-                        Last Name: ${widget.userEntity.lastName},
-                        Date Of Birth: ${widget.userEntity.dateOfBirth},
-                        Brief Description: ${widget.userEntity.description},
-                        Memorability to Secureness scale: ${sliderValue.value},
-                        Additional Parameters: ${widget.additionalParameters.text}
-                        Password Length: ${widget.lengthController.text}
-                      ''');
+              child: BlocBuilder<PremiumCubit, PremiumCubitState>(
+                builder: (context, state) {
+                  if (state is PremiumCubitLoaded) {
+                    double credits = BlocProvider.of<PremiumCubit>(context)
+                        .getCreditsCount();
+                    return PrimaryButton(
+                      child: const Text("Done"),
+                      onPressed: () {
+                        if (credits <= 0) {
+                          showCreditsDialog(context);
+                        } else {
+                          BlocProvider.of<PremiumCubit>(context)
+                              .removeCredits(5, context);
+                          BlocProvider.of<AiCubit>(context).getAiPassword(
+                            '''
+                            First Name: ${widget.userEntity.firstName},
+                            Last Name: ${widget.userEntity.lastName},
+                            Date Of Birth: ${widget.userEntity.dateOfBirth},
+                            Brief Description: ${widget.userEntity.description},
+                            Memorability to Secureness scale: ${sliderValue.value},
+                            Additional Parameters: ${widget.additionalParameters.text}
+                            Password Length: ${widget.lengthController.text}
+                        ''',
+                          );
+                        }
+                      },
+                    );
+                  } else {
+                    return Button.primary(child: CircularProgressIndicator());
+                  }
                 },
               ),
             ),

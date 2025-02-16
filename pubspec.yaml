@@ -1,6 +1,6 @@
 name: password_manager
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -8,22 +8,23 @@ environment:
 
 dependencies:
   animations: ^2.0.11
-  bloc: ^8.1.4
+  bloc: ^9.0.0
   equatable: ^2.0.5
-  expandable_page_view: ^1.0.17
-  fluid_dialog: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.6
+  flutter_animate: ^4.5.2
+  flutter_bloc: ^9.0.0
   flutter_dotenv: ^5.2.1
   flutter_multi_formatter: ^2.13.0
+  flutter_secure_storage: ^9.2.4
+  flutter_svg: ^2.0.17
   get_it: ^8.0.0
+  google_mobile_ads: ^5.3.0
   http: ^1.2.2
   local_auth: ^2.3.0
   lottie: ^3.3.0
-  mesh_gradient: ^1.3.8
   random_string_generator: ^2.0.0
-  shadcn_flutter: ^0.0.20
+  shadcn_flutter: ^0.0.24
   shared_preferences: ^2.3.2
   smooth_page_indicator: ^1.2.0+3
   toastification: ^2.3.0
@@ -39,6 +40,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/shapes/
+    - assets/threejs_coin/index.html
     - .env
   fonts:
     - family: GeistSans

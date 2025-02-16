@@ -1,4 +1,6 @@
 import 'package:animations/animations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:password_manager/features/app/const/classes_functions/string_const.dart';
 import 'package:password_manager/features/passwords/presentation/cubit/passwords_cubit.dart';
@@ -6,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/features/passwords/presentation/pages/password_pages/create_password_page.dart';
 import 'package:password_manager/features/passwords/presentation/pages/password_pages/password_open_page.dart';
 import 'package:password_manager/features/ai/presentation/pages/profile_page/profile_page.dart';
+import 'package:password_manager/features/premium/presentation/cubit/premium_cubit_cubit.dart';
+import 'package:password_manager/features/premium/presentation/pages/credits_buy_page.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import '../../../domain/entities/password_entity.dart';
 
@@ -16,11 +20,21 @@ class PasswordsPage extends StatefulWidget {
   State<PasswordsPage> createState() => _PasswordsPageState();
 }
 
-class _PasswordsPageState extends State<PasswordsPage> {
+class _PasswordsPageState extends State<PasswordsPage>
+    with TickerProviderStateMixin {
+  late final Animation<double> animation;
+  late final AnimationController controller;
+
   @override
   void initState() {
+    controller = AnimationController(vsync: this, duration: 2.seconds);
+    animation = Tween<double>(begin: 0, end: 1).animate(controller);
+    Future.delayed(3000.ms).then(
+      (value) => controller.forward(),
+    );
     super.initState();
     BlocProvider.of<PasswordsCubit>(context).getAiPassword();
+    BlocProvider.of<PremiumCubit>(context).getCredits();
   }
 
   @override
@@ -35,8 +49,49 @@ class _PasswordsPageState extends State<PasswordsPage> {
         AppBar(
           surfaceBlur: 3,
           surfaceOpacity: 0.5,
-          title: const Text("Your Passwords"),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                'assets/passman.svg',
+                height: 45,
+              ),
+              Gap(5),
+              Text("Passman"),
+            ],
+          ),
           trailing: [
+            Button.outline(
+              child: Row(
+                children: [
+                  const Icon(
+                    RadixIcons.shadowOuter,
+                    size: 20,
+                  ),
+                  Gap(10),
+                  BlocBuilder<PremiumCubit, PremiumCubitState>(
+                    builder: (context, state) {
+                      if (state is PremiumCubitLoaded) {
+                        final credits = state.credits;
+                        return Text(
+                          credits.toInt().toString(),
+                          textAlign: TextAlign.center,
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreditsPage(),
+                    ));
+              },
+            ),
             IconButton.outline(
               icon: const Icon(RadixIcons.person),
               onPressed: () {
@@ -105,8 +160,36 @@ class _PasswordsPageState extends State<PasswordsPage> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Stack(
                     children: [
-                      const Center(
-                        child: Text('No password created'),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/passman_lock.svg',
+                              height: 100,
+                            )
+                                .animate()
+                                .moveY(curve: Curves.easeOutCirc)
+                                .scale(
+                                    curve: Curves.easeOutCirc,
+                                    duration: 1500.ms,
+                                    begin: Offset(0.9, 0.9))
+                                .fadeIn()
+                                .blur(begin: Offset(5, 5), end: Offset.zero),
+                            Gap(30),
+                            Text('No password created')
+                                .animate(delay: 50.ms)
+                                .moveY(curve: Curves.easeOutCirc)
+                                .scale(
+                                    curve: Curves.easeOutCirc,
+                                    duration: 1500.ms,
+                                    begin: Offset(0.9, 0.9))
+                                .fadeIn()
+                                .blur(begin: Offset(5, 5), end: Offset.zero),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(70),
@@ -118,6 +201,7 @@ class _PasswordsPageState extends State<PasswordsPage> {
                               width: 100,
                               height: 100,
                               child: Lottie.asset(
+                                controller: controller,
                                 'assets/attention_grabby.json',
                                 repeat: false,
                               ),
@@ -132,7 +216,11 @@ class _PasswordsPageState extends State<PasswordsPage> {
                 final passwordList = snapshot.data!;
 
                 return Padding(
-                  padding: const EdgeInsets.only(top: 72, left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 80,
+                  ),
                   child: ListView.builder(
                     itemCount: passwordList.length,
                     itemBuilder: (context, index) {
@@ -207,7 +295,7 @@ class _PasswordsPageState extends State<PasswordsPage> {
           } else {
             return const Center(
               child: Text(
-                "state.props",
+                "Unexpected Error",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
